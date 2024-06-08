@@ -1,0 +1,197 @@
+swagger: "2.0"
+info:
+  title: This is my swagger ui docs
+  description: This is my project documentation made by me.
+  version: 1.0
+  contact: 
+    email: shiv@shadowcast.io
+  liscence: 
+    name : Apache 2.0
+    url: "http://apache.org/"
+  servers: 
+    -url : "http://localhost:4000/"
+    description: This is my local server
+    -url: "http://company.com/"
+    description: This is my company server
+
+schemes : [http, https]
+
+paths : 
+# Returns a String
+  /string : 
+    get :
+      summary : Returns a String
+      description : It is just returning a fake string.
+      responses : 
+        200 :
+          description : Success
+          schema : 
+            type : string
+            example : "A fake string here"
+        400 :
+          description : User Error
+        500 :
+          description : Internal Server Error
+
+# Returns a Object
+  /user : 
+    get :
+      summary : This returns a single object
+      description : It is just returning a user object.
+      responses : 
+        200 :
+          description : Success
+          schema : 
+            type : object
+            properties : 
+              id : 
+                type : integer
+              name : 
+                type : string
+        400 :
+          description : User Error
+        500 :
+          description : Internal Server Error
+
+# Returns array of users
+  /users : 
+    get :
+      summary : This returns a array of users object
+      description : It is just returning a Array users object.
+      responses : 
+        200 :
+          description : Success
+          schema : 
+            type : array
+            items : 
+              type : object
+              properties : 
+                id : 
+                  type : integer
+                name : 
+                  type : string
+        400 :
+          description : User Error
+        500 :
+          description : Internal Server Error
+
+# Returns user data in dynamically through path
+  /users/{userId} : 
+    get :
+      summary : This returns a array of users object
+      description : It is just returning a Array users object.
+      parameters : 
+        - name : userId
+          in : path
+          required : true
+          schema : 
+            type : integer
+      responses : 
+        200 :
+          description : Success
+        400 :
+          description : User Error
+        500 :
+          description : Internal Server Error
+
+# # Post json body data
+#   /create : 
+#     post :
+#       summary : This is posting user data
+#       produces : 
+#         - application/json
+#       consumes : 
+#         - application/json
+#       description : It is just returning a Array users object.
+#       parameters : 
+#         - in : body
+#           name : user
+#           schema : 
+#             type : object
+#             properties : 
+#               id: 
+#                 type : integer
+#               name : 
+#                 type : string
+#       responses : 
+#         200 :
+#           description : Ok
+#         400 :
+#           description : User Error
+#         500 :
+#           description : Internal Server Error
+          
+# Post Schema with Definition body data
+  /create : 
+    post :
+      summary : This is posting user data
+      produces : 
+        - application/json
+      consumes : 
+        - application/json
+      parameters : 
+      - in : body
+        name : user
+        schema : 
+          $ref : "#/components/schemas/User"
+      responses : 
+        200 :
+          description : Ok
+        400 :
+          description : User Error
+        500 :
+          description : Internal Server Error
+
+#Query
+  /usersQuery:
+    get:
+      parameters : 
+      - in : query
+        name : id
+        type : integer
+        enum : [1,2,3]
+      - in : query
+        name : age
+        type : integer
+      responses :
+        200 :
+          description : Ok
+
+#File upload
+  /upload : 
+    post : 
+      consumes : 
+        - multipart/form-data
+      parameters : 
+        - in : formData
+          name : file
+          type : file
+          required : true
+          description : File upload
+        - in : formData
+          name : id
+          type : integer
+          required : true
+          description : Id of Integer
+        - in : header
+          name : auth
+          schema : 
+            type : string
+        - in : cookie
+          name : debug
+          schema : 
+            type : string
+      responses : 
+        200 : 
+          description : Ok
+
+components : 
+  schemas : 
+    User : 
+      type : object
+      properties : 
+        id : 
+          type : integer
+          required : true
+        name : 
+          type : string
